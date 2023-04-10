@@ -33,25 +33,29 @@ const item3 = new Item ({
 
 const defaultItems = [item1, item2, item3];
 
-//Item.insertMany(defaultItems);
+Item.insertMany(defaultItems);
 
 
 
 
 app.get("/", function(req, res) {
-
-  Item.find({Item})
-.then(function(err, foundItems){res.render("list", {listTitle: "Today", newListItems: foundItems});})
-.catch(error => console.log(error));
-
-  
-
+  Item.find({}) // the {} find all the items.
+    .then(foundItems => res.render("list", {listTitle: "Today", newListItems: foundItems}))
+    .catch(error => console.log(error));
 });
+
 
 app.post("/", function(req, res){
 
-  const item = req.body.newItem;
+  const itemName = req.body.newItem;
 
+  const item = new Item({
+    name: itemName
+  });
+
+  item.save();
+
+  res.redirect("/");
 });
 
 app.get("/work", function(req,res){
